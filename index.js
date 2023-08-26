@@ -31,11 +31,16 @@ async function run() {
     await client.connect();
 
     const servicesCollection = client.db("carDoctorDB").collection("services");
+    const productsCollection = client.db("carDoctorDB").collection("products");
 
 
     app.get('/services', async(req, res) => {
         const services = await servicesCollection.find().toArray();
         res.send(services);
+    })
+    app.get('/products', async(req, res) => {
+        const products = await productsCollection.find().toArray();
+        res.send(products);
     })
 
 
