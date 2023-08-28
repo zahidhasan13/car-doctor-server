@@ -50,6 +50,7 @@ async function run() {
       const service = await servicesCollection.findOne(query);
       res.send(service);
     })
+    // bookings
     app.get('/bookings', async(req, res) => {
       let query = {};
       if(req.query?.email){
@@ -58,13 +59,33 @@ async function run() {
       const bookings = await bookingCollection.find(query).toArray();
       res.send(bookings);
     });
-    // bookings
 
 
     app.post('/bookings', async(req, res) => {
       const booking = req.body;
         const bookings = await bookingCollection.insertOne(booking);
         res.send(bookings);
+    })
+
+    app.patch('/bookings/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const cartUpdated = req.body;
+      const updateCart = {
+        $set: {
+          status: cartUpdated.status
+        }
+      }
+      const result = await bookingCollection.updateOne(query, updateCart);
+      res.send(result) 
+
+    })
+
+    app.delete('/bookings/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const booking = await bookingCollection.deleteOne(query);
+      res.send(booking)
     })
 
 
